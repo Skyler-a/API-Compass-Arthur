@@ -1,5 +1,5 @@
 const moment = require('moment')
-const connection = require('../database/conexao')
+const conexao = require('../database/conexao')
 
 class Users {
 
@@ -12,33 +12,33 @@ class Users {
         const validation = [
             {
                 name: 'birthDate',
-                valid: birthDateIsValid,
+                valido: birthDateIsValid,
                 message: 'Você deve ser maior de idade para se cadastrar'
             },
             {
                 name: 'password',
-                valid: passwordIsValid,
+                valido: passwordIsValid,
                 message: 'Sua senha deve conter ao menos 6 dígitos'
             },
             {
                 name: 'email',
-                valid: emailIsValid,
+                valido: emailIsValid,
                 message: 'O email informado é inválido'
             }
 
         ]
 
-        const errors = validation.filter(field => !field.valid)
-        const errorsExist = errors.length
+        const erros = validation.filter(campo => !campo.valido)
+        const existemErros = erros.length
 
-        if(errorsExist) {
-            res.status(400).json(errors)
+        if(existemErros) {
+            res.status(400).json(erros)
         } else {
             const bDate = {...users, birthDate}
 
             const sql = 'INSERT INTO usuarios SET ?'
 
-            connection.query(sql, bDate, (err, results) => {
+            conexao.query(sql, bDate, (err, results) => {
                 if(err) {
                     res.status(400).json(err)
                 } else {
@@ -53,7 +53,7 @@ class Users {
     mostrarTodosOsUsuariosCadastrados(res) {
         const sql = 'SELECT * FROM usuarios'
 
-        connection.query(sql, (err, results) => {
+        conexao.query(sql, (err, results) => {
             if(err) {
                 res.status(404).json(err)
             } else {
@@ -67,7 +67,7 @@ class Users {
     localizarPorId(id, res) {
         const sql = `SELECT * FROM usuarios WHERE id=${id}`
     
-        connection.query(sql, (err, results) => {
+        conexao.query(sql, (err, results) => {
             const user = results[0]
             if(err) {
                 res.status(404).json(err)
@@ -85,7 +85,7 @@ class Users {
 
         const sql = 'UPDATE usuarios SET ? WHERE id=?'
 
-        connection.query(sql, [values, id], (err, results) => {
+        conexao.query(sql, [values, id], (err, results) => {
             if(err) {
                 res.status(404).json(err)
             } else {
@@ -101,7 +101,7 @@ class Users {
 
         const sql = 'UPDATE usuarios SET ? WHERE id= ? '
 
-        connection.query(sql, [values, id], (err, results) => {
+        conexao.query(sql, [values, id], (err, results) => {
             if(err) {
                 res.status(404).json(err)
             } else {
@@ -113,7 +113,7 @@ class Users {
     delete(id, res) {
         const sql = 'DELETE FROM usuarios WHERE id=?'
 
-        connection.query(sql, id, (err, results) => {
+        conexao.query(sql, id, (err, results) => {
             if(err) {
                 res.status(404).json(err)
             } else {

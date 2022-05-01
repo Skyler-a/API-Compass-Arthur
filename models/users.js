@@ -7,11 +7,12 @@ class Users {
         const birthDate = moment(users.birthDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
         const birthDateIsValid = moment().diff(birthDate, 'years', false) >= 18
         const passwordIsValid = users.password.length >= 6
+        const emailIsValid =  /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(users.email) 
 
         const validation = [
             {
                 name: 'birthDate',
-                valido: birthDateIsValid,
+                valid: birthDateIsValid,
                 message: 'Você deve ser maior de idade para se cadastrar'
             },
             {
@@ -19,10 +20,15 @@ class Users {
                 valid: passwordIsValid,
                 message: 'Sua senha deve conter ao menos 6 dígitos'
             },
+            {
+                name: 'email',
+                valid: emailIsValid,
+                message: 'O email informado é inválido'
+            }
 
         ]
 
-        const errors = validation.filter(campo => !campo.valido)
+        const errors = validation.filter(field => !field.valid)
         const errorsExist = errors.length
 
         if(errorsExist) {

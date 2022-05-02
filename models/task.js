@@ -8,13 +8,18 @@ class Tasks {
         const date = moment(task.date, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
         const currentDate = moment().format('YYYY-MM-DD HH:MM:SS')
         const dateIsValid = moment(date).isSameOrAfter(currentDate)
-
+        const descriptionIsValid = task.description.length > 0
 
         const validation = [
             {
                 nome: 'Data inválida',
                 valido: dateIsValid,
                 mensagem: 'Insira uma data posterior ao dia de hoje'
+            },
+            {
+                nome: 'Descrição inválida',
+                valido: descriptionIsValid,
+                mensagem: 'O campo descrição não pode ser vazio'
             }
         ]
         const erros = validation.filter(campo => !campo.valido)

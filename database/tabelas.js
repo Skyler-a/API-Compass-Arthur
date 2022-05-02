@@ -3,6 +3,7 @@ class Tabelas {
         this.connection = connection
 
         this.createUser()
+        this.createTask()
     }
 
     createUser() {
@@ -16,7 +17,25 @@ class Tabelas {
             }
         })
     }
-}    
+    createTask() { 
+        const sql = `CREATE TABLE IF NOT EXISTS Task (
+			id_task int PRIMARY KEY NOT NULL auto_increment,
+            description varchar(200) NOT NULL, 
+            date DATETIME NOT NULL,
+            user int,
+            CONSTRAINT fk_UserTask FOREIGN KEY (user) REFERENCES usuarios (id));`
+
+        this.connection.query(sql, err => {
+            if(err) {
+                console.log(err)
+            } else {
+                console.log('Tabela de Task criada com sucesso')
+            }
+        })
+
+    }
+
+} 
 
 
 module.exports = new Tabelas;

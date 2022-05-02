@@ -6,6 +6,7 @@ class Tabelas {
         this.createTask()
     }
 
+    //Função para criar a tabela de usuários
     createUser() {
         const sql = `CREATE TABLE IF NOT EXISTS Usuarios (id int NOT NULL AUTO_INCREMENT, name varchar(70) NOT NULL, cpf varchar(11) NOT NULL, birthDate DATE NOT NULL, email varchar(50) NOT NULL, password varchar(30) NOT NULL, address varchar(200) NOT NULL, number varchar(15) NOT NULL, complement varchar(60) NOT NULL, city varchar(50) NOT NULL, state varchar(25) NOT NULL, country varchar(55) NOT NULL, zipCode varchar(8) NOT NULL, PRIMARY KEY (id))`
 
@@ -17,6 +18,8 @@ class Tabelas {
             }
         })
     }
+
+    //Função para criar a tabela Task
     createTask() { 
         const sql = `CREATE TABLE IF NOT EXISTS Task (
 			id_task int PRIMARY KEY NOT NULL auto_increment,

@@ -2,13 +2,13 @@ const moment = require('moment')
 const conexao = require('../database/conexao')
 
 class Users {
-
+    //Função para cadastrar um novo usuário
     cadastrarNovoUsuario(users, res) {
         const birthDate = moment(users.birthDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
         const birthDateIsValid = moment().diff(birthDate, 'years', false) >= 18
         const passwordIsValid = users.password.length >= 6
         const emailIsValid =  /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(users.email) 
-
+        //Validações para que o usuário seja cadastrado com sucesso
         const validation = [
             {
                 name: 'birthDate',
@@ -49,7 +49,7 @@ class Users {
         }
 
     } 
-
+    //Função para mostrar todos os usuários cadastrados
     mostrarTodosOsUsuariosCadastrados(res) {
         const sql = 'SELECT * FROM usuarios'
 
@@ -63,21 +63,23 @@ class Users {
         })
 
     }
-
+    //Função para buscar um usuário pelo id
     localizarPorId(id, res) {
         const sql = `SELECT * FROM usuarios WHERE id=${id}`
-    
-        conexao.query(sql, (err, results) => {
+
+            conexao.query(sql, (err, results) => {
             const user = results[0]
-            if(err) {
-                res.status(404).json(err)
+            if (results.length == 0) {
+                res.status(404).json([{message: 'Usuário não encontrado'}])
+            } else if (err) {
+                res.status(500).json(err)
             } else {
                 res.status(200).json(user)
             }
-
         })
+            
     }
-
+    //Função para atualizar um usuário sem ser necessário passar todos os campos
     updatePorPut(id, values, res) {
         if(values.birthDate) {
             values.birthDate = moment(values.birthDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
@@ -93,7 +95,7 @@ class Users {
             }
         })
     }
-
+    //Função para atualizar um usuário sendo nessessário passar todos os campos
     updatePorPatch(id, values, res) {
         if(values.birthDate) {
             values.birthDate = moment(values.birthDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
@@ -109,7 +111,7 @@ class Users {
             }
         })
     }
-
+    //Função para deletar um usuário
     delete(id, res) {
         const sql = 'DELETE FROM usuarios WHERE id=?'
 
@@ -126,3 +128,4 @@ class Users {
 }
 
 module.exports = new Users
+
